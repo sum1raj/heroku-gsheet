@@ -1,0 +1,7 @@
+bs4==0.01
+urllib3==1.26.4
+selenium==3.141.0
+pandas==1.4.2
+gspread==5.4.0
+gspread-formatting==1.0.6
+gspread-dataframe==3.3.0
