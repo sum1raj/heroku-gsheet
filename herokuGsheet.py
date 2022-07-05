@@ -1,59 +1,46 @@
-#############
-#
-#  To launch the script on Pyzo, press Ctrl + E
-#
-#  The last data is available on the Excel file Analysis (use the Update button to refresh)
-#
-#  All the historical data is available on the csv file Exportcsv
-#
-#  To restart the script, close the window and restart
-#
-#############
-#path=r'C:/Users/arnau/Dropbox/WebScraping Crypto/'
-#path=r'C:/Users/Arnaud Lorioz/Dropbox/WebScraping Crypto/'
-path=r'C:\Users\moham\PycharmProjects\HerokuScriptToGSheet'
-# import b
 ## Import libraries
 from bs4 import BeautifulSoup
 import urllib.request
 import csv
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-import pandas as pd
-from datetime import datetime
+import gspread_dataframe as gd
 import time
 import pandas as pd
 import gspread
 from datetime import datetime, timedelta
 from gspread_formatting import *
-import gspread_dataframe as gd
-i=0
+from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+import chromedriver_autoinstaller
+
+chromedriver_autoinstaller.install()
+
+i = 0
 t = ""
-PATH = 'C:\\bin\\chromedriver.exe'
+path = r'C:\Users\moham\PycharmProjects\HerokuScriptToGSheet'
+# PATH = 'C:\\bin\\chromedriver.exe'
 
 gc = gspread.service_account(filename="C:\\bin\\bil.json")
 sh = gc.open_by_url("https://docs.google.com/spreadsheets/d/12c5L6ArSNBJgMAalhtxdvKfz1mZ5cBUzSqUzADqj1F0/edit#gid=818333264")
 worksheet = sh.worksheet("Sheet1")
-while True :    # création d'une boucle while qui s'executera tant que True == True
+while True:    # création d'une boucle while qui s'executera tant que True == True
         ## Step 1 : Extract the HTML page
     try:
-        # s=Service(path+'chromedriver')
-        #s=Service(path+'chromedrivermac')
         options = webdriver.ChromeOptions()
-        # options.add_argument('headless')
         options.add_argument('--headless')
         # driver = webdriver.Chrome(service=s,chrome_options=options)
         try:
-            driver = webdriver.Chrome(PATH,options=options)
+            # driver = webdriver.Chrome(PATH, options=options)
+            driver = webdriver.Chrome(options=options)
         except Exception as e:
             print(e)
         print("driver", driver)
         driver.get('https://www.coinglass.com/FundingRate')
         content = driver.page_source
         soup = BeautifulSoup(content,features="html.parser")
-        t=str(datetime.now())[:-7]
-        print(t,"Here T is")
+        t = str(datetime.now())[:-7]
+        print(t, "Here T is")
         driver.quit()
  # print "This report has no legal value"
         #Bitcoin Price extract
@@ -93,7 +80,7 @@ while True :    # création d'une boucle while qui s'executera tant que True == 
                     Crypto.append(p.get_text())
             simple_list.append(Crypto)
         ## Step 3 : Updating of GoogleSheet files
-        df=pd.DataFrame(simple_list,columns=['Time','Price BTC','Binance','Okex','Bybit','FTX','Huobi','Gate','Bitget','CoinEx','Binance Token','Okex Token','Bybit Token','Bitmex Token','Huobi Token','Deribit Token'])
+        df = pd.DataFrame(simple_list,columns=['Time','Price BTC','Binance','Okex','Bybit','FTX','Huobi','Gate','Bitget','CoinEx','Binance Token','Okex Token','Bybit Token','Bitmex Token','Huobi Token','Deribit Token'])
         df.insert(0,'Crypto',list_cc)
         print(len(df),"Length of DF")
         try:
