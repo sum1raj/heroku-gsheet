@@ -1,1 +1,1 @@
-worker: python BTCScrapetoGSheet.py
+worker: python herokuGsheet.py
