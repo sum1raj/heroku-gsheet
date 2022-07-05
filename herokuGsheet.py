@@ -1,11 +1,14 @@
 ## Import libraries
-from bs4 import BeautifulSoup
+import json
+
+import requests
 import urllib.request
 import csv
 import gspread_dataframe as gd
 import time
 import pandas as pd
 import gspread
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from gspread_formatting import *
 from datetime import datetime
@@ -15,13 +18,23 @@ from selenium.webdriver.chrome.service import Service
 import chromedriver_autoinstaller
 
 chromedriver_autoinstaller.install()
+# json_url = 'https://raw.githubusercontent.com/sum1raj/heroku-gsheet/main/bil.json'
+# f = requests.get(json_url)
+# json_name = json.loads(f.text)
 
 i = 0
 t = ""
-path = r'C:\Users\moham\PycharmProjects\HerokuScriptToGSheet'
 # PATH = 'C:\\bin\\chromedriver.exe'
+# gc = gspread.service_account(filename="C:\\bin\\bil.json")
+# gc = gspread.service_account(filename=json_name)
 
-gc = gspread.service_account(filename="C:\\bin\\bil.json")
+json_url = 'https://raw.githubusercontent.com/sum1raj/heroku-gsheet/main/bil.json'
+filename = 'credentials.json'
+res = requests.get(json_url)
+with open(filename, 'w') as f:
+    f.write(res.text)  # save the data into a file
+gc = gspread.service_account(filename=filename)
+
 sh = gc.open_by_url("https://docs.google.com/spreadsheets/d/12c5L6ArSNBJgMAalhtxdvKfz1mZ5cBUzSqUzADqj1F0/edit#gid=818333264")
 worksheet = sh.worksheet("Sheet1")
 while True:    # création d'une boucle while qui s'executera tant que True == True
